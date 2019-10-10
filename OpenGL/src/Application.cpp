@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -106,6 +107,54 @@ static unsigned int CreateShader(const std::string& vertexShader, const std::str
 	return program;
 }
 
+static std::vector<float> verticies = {
+	-0.2f, -0.2f,
+	0.2f, -0.2f,
+	0.2f,  0.2f,
+	-0.2f,  0.2f
+};
+
+static std::vector<float> AdjustVerticies(float xMove, float yMove)
+{
+	std::vector<float> fNewData(8);
+
+	// memcpy(&fNewData[0], ((const void*)&verticies), sizeof(verticies));
+	for (int i = 0; i < 8; i++)
+	{
+		fNewData[i] = verticies[i];
+	}
+
+	for (int iVertex = 0; iVertex < 8; iVertex += 2)
+	{
+		fNewData[iVertex] += xMove;
+		fNewData[iVertex + 1] += yMove;
+
+		std::cout << "XPos " << iVertex << " " << fNewData[iVertex] << std::endl;
+		std::cout << "YPos " << iVertex + 1 << " " << fNewData[iVertex + 1] << std::endl;
+	}
+
+	return fNewData;
+}
+
+static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	float xMove = 0;
+	float yMove = 0;
+
+	if (key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT))
+		yMove += 0.01f;
+
+	if (key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT))
+		xMove -= 0.01f;
+
+	if (key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT))
+		yMove -= 0.01f;
+
+	if (key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT))
+		xMove += 0.01f;
+
+	verticies = AdjustVerticies(xMove, yMove);
+}
 
 int main(void)
 {
@@ -139,12 +188,12 @@ int main(void)
 	std::cout << glGetString(GL_VERSION) << std::endl;  // outputting the version to console
 
 	// list of vertex positions
-	float positions[] = {
-		-0.5f, -0.5f,
-		 0.5f, -0.5f,
-		 0.5f,  0.5f,
-		-0.5f,  0.5f
-	};
+	//float positions[] = {
+	//	-0.5f, -0.5f,
+	//	 0.5f, -0.5f,
+	//	 0.5f,  0.5f,
+	//	-0.5f,  0.5f
+	//};
 
 	// setting up index buffer
 	unsigned int indicies[] = {
@@ -160,7 +209,7 @@ int main(void)
 
 	// Setting up and binding the VERTEX BUFFER DATA to the VERTEX ARRAY OBJECT
 	// Step 1: the buffer
-	VertexBuffer vb(positions, 4 * 2 * sizeof(float));
+	VertexBuffer vb(&verticies[0], 4 * 2 * sizeof(float));
 
 	// Setting up and binding the VERTEX ATTRIUTES to the VERTEX ARRAY OBJECT
 	// Step 2: the vertex attributes
@@ -232,6 +281,12 @@ int main(void)
 
 		/* Poll for and process events */
 		glfwPollEvents();
+
+		glfwSetKeyCallback(window, KeyCallback);
+
+		glBindBuffer(GL_ARRAY_BUFFER, vao);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(verticies), &verticies[0]);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
 	// cleaning up at end of the program
@@ -239,3 +294,4 @@ int main(void)
 	glfwTerminate();
 	return 0;
 }
+
