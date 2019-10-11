@@ -128,9 +128,6 @@ static std::vector<float> AdjustVerticies(float xMove, float yMove)
 	{
 		fNewData[iVertex] += xMove;
 		fNewData[iVertex + 1] += yMove;
-
-		std::cout << "XPos " << iVertex << " " << fNewData[iVertex] << std::endl;
-		std::cout << "YPos " << iVertex + 1 << " " << fNewData[iVertex + 1] << std::endl;
 	}
 
 	return fNewData;
@@ -187,14 +184,6 @@ int main(void)
 
 	std::cout << glGetString(GL_VERSION) << std::endl;  // outputting the version to console
 
-	// list of vertex positions
-	//float positions[] = {
-	//	-0.5f, -0.5f,
-	//	 0.5f, -0.5f,
-	//	 0.5f,  0.5f,
-	//	-0.5f,  0.5f
-	//};
-
 	// setting up index buffer
 	unsigned int indicies[] = {
 		0, 1, 2,
@@ -248,6 +237,8 @@ int main(void)
 	float r = 0.0f;
 	float increment = 0.05f;
 
+	// set up callback for user input
+	glfwSetKeyCallback(window, KeyCallback);
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
@@ -263,7 +254,7 @@ int main(void)
 		// glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);		// 4 set up layout of vertex buffer					// handled by vao
 		// glEnableVertexAttribArray(0);												//   [cont] enabled the vertex attrib array
 
-		glBindVertexArray(vao);														// 3 & 4 handled
+		glBindVertexArray(vao); 													// 3 & 4 handled
 		ib.Bind();																	// 5 bind index buffer
 
 		// Draw the elements using the index(aka element) buffer
@@ -282,11 +273,8 @@ int main(void)
 		/* Poll for and process events */
 		glfwPollEvents();
 
-		glfwSetKeyCallback(window, KeyCallback);
-
-		glBindBuffer(GL_ARRAY_BUFFER, vao);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(verticies), &verticies[0]);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		/* update the values in the vertex buffer */
+		vb.UpdateBuffer(&verticies[0], 4 * 2 * sizeof(float));
 	}
 
 	// cleaning up at end of the program
