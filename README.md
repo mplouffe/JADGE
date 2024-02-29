@@ -1,7 +1,5 @@
-# OpenGL Playground
+# Just A Dumb Game Engine
 
-Just a simple project to start learning Open GL and shader/renderer pipelines.
-
-All praise to [the Cherno](https://www.youtube.com/user/TheChernoProject). 
+Trying to get better at C++ by building a game engine.
 
 Made with :blue_heart:
