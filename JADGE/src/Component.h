@@ -1,9 +1,10 @@
+#pragma once
 
 enum ComponentType
 {
     TRANSFORM,
-	BOX_COLLIDER,
-    PHYSICBODY,
+	// BOX_COLLIDER,
+    // PHYSICBODY,
     SPRITE,
 };
 
@@ -11,6 +12,5 @@ class Component
 {
     public:
         virtual ComponentType getComponentType() = 0;
-    private:
-        ComponentType m_componentType; 
+        virtual void update() = 0;
 };

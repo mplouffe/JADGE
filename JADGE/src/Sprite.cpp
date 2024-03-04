@@ -57,7 +57,6 @@ bool Sprite::loadFromFile(std::string path, SDL_Renderer* renderer)
 
     // return sucess
     mTexture = newTexture;
-    mRenderer = renderer;
     return mTexture != NULL;
 }
 
@@ -91,7 +90,6 @@ bool Sprite::loadFromRenderedText(std::string aTextureText, SDL_Color aTextColor
         SDL_FreeSurface(textSurface);
     }
 
-    mRenderer = aRenderer;
     return mTexture != NULL;
 }
 
@@ -117,21 +115,21 @@ void Sprite::setBlendMode(SDL_BlendMode blending)
     SDL_SetTextureBlendMode(mTexture, blending);
 }
 
-void Sprite::render(std::tuple<int, int> position, SDL_Rect* clip)
-{
-    // set rendering pspace and render to screen
-    int x;
-    int y;
-    std::tie(x, y) = position;
-    SDL_Rect renderQuad = {x, y, mWidth, mHeight};
-    if (clip != NULL)
-    {
-        renderQuad.w = clip->w;
-        renderQuad.h = clip->h;
-    }
+// void Sprite::render(std::tuple<int, int> position, SDL_Rect* clip)
+// {
+//     // set rendering pspace and render to screen
+//     int x;
+//     int y;
+//     std::tie(x, y) = position;
+//     SDL_Rect renderQuad = {x, y, mWidth, mHeight};
+//     if (clip != NULL)
+//     {
+//         renderQuad.w = clip->w;
+//         renderQuad.h = clip->h;
+//     }
 
-    SDL_RenderCopy(mRenderer, mTexture, clip, &renderQuad);
-}
+//     SDL_RenderCopy(mRenderer.get(), mTexture.get(), clip, &renderQuad);
+// }
 
 int Sprite::getWidth()
 {

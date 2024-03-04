@@ -1,8 +1,10 @@
+#pragma once
 #include "Component.h"
 
 #include <string>
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include <memory>
 
 class Sprite : public Component
 {
@@ -16,12 +18,11 @@ class Sprite : public Component
         // void setColor(Uint8 red, Uint8 green, Uint8 blue);
         void setBlendMode(SDL_BlendMode aBlending);
         void setAlpha(Uint8 aNewAlpha);
-        void render(std::tuple<int, int> aPosition, SDL_Rect* aClip = NULL);
+        // void render(std::tuple<int, int> aPosition, SDL_Rect* aClip = NULL);
         int getWidth();
         int getHeight();
     private:
         SDL_Texture* mTexture;
-        SDL_Renderer* mRenderer;
         int mWidth;
         int mHeight;
 };

@@ -1,5 +1,5 @@
 # OBJS - specifies which files to compile as part of the project
-OBJS = Application.cpp
+OBJS = Application.cpp JABER.cpp
 
 # CC - specifies which compiler
 CC = g++
@@ -13,7 +13,7 @@ LIBRARY_PATHS = -LE:\dev_lib\SDL2-2.26.2\i686-w64-mingw32\lib -LE:\dev_lib\SDL2_
 # COMPILER_FLAGS - specifies the ad ditional compiltion options
 # -w = supresses all warnings
 # -Wl,-subsystem,windows = gets rid of console window
-COMPILER_FLAGS = -w -Wl,-subsystem,windows
+COMPILER_FLAGS = -w -Wl,-subsystem,windows -std=c++17
 
 # LINKER_FLAGS - specifies the libraries we're linking against
 LINKER_FLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer

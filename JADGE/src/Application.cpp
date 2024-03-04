@@ -7,12 +7,17 @@
 #include <string>
 #include <sstream>
 #include <cmath>
+#include <memory>
+
+#include "BuildSettings.h"
+#include "JABER.h"
 
 const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 768;
 
 SDL_Window* gWindow = NULL;
-SDL_Renderer* gRenderer = NULL;
+
+std::unique_ptr<JABER> gRenderer = NULL;
 
 // Audio
 // - Music
@@ -57,41 +62,32 @@ bool init()
 		}
 
 		gWindow = SDL_CreateWindow("JADGE: Just A Dumb Game Engine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+
 		if (gWindow == NULL)
 		{
 			SDL_Log("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 			success = false;
 		}
-		else
+
+		gRenderer = std::make_unique<JABER>(new JABER());
+		if (!gRenderer->init(gWindow))
 		{
-			// Create renderer for window
-			gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
-			if (gRenderer == NULL)
-			{
-				SDL_Log("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
-				success = false;
-			}
-			else
-			{
-				// Initialize renderer color
-				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-
-				// Initalize SDL_mixer
-				if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
-				{
-					SDL_Log("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
-					success = false;
-				}
-
-				// Initalize SDL_ttf
-				if(TTF_Init() == -1)
-				{
-					SDL_Log("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
-					success = false;
-				}
-			}
+			success = false;
 		}
+
+		// Initalize SDL_mixer
+		if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+		{
+			SDL_Log("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+			success = false;
+		}
+
+		// Initalize SDL_ttf
+		if(TTF_Init() == -1)
+		{
+			SDL_Log("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+			success = false;
+		}	
 	}
 
 	return success;
@@ -108,7 +104,7 @@ void close()
 	gGameController = NULL;
 
 	// Destroy window
-	SDL_DestroyRenderer(gRenderer);
+	gRenderer->close();
 	SDL_DestroyWindow(gWindow);
 	
 	gWindow = NULL;
@@ -121,7 +117,7 @@ void close()
 	SDL_Quit();
 }
 
-int main( int argc, char* args[])
+int main(int argc, char* args[])
 {
 	//Initialize SDL
 	if(!init())
@@ -143,12 +139,7 @@ int main( int argc, char* args[])
 			}
 		}
 
-		// Clear Screen
-		SDL_SetRenderDrawColor(gRenderer, 0x55, 0xFF, 0xFF, 0xFF);
-		SDL_RenderClear(gRenderer);
-
-		// Update Screen
-		SDL_RenderPresent(gRenderer);
+		gRenderer->update();
 	}
 
 	return 0;

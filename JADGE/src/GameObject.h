@@ -1,11 +1,17 @@
+#pragma once
+
 #include "Component.h"
 #include "Transform.h"
+#include <memory>
+#include <map>
 
 class GameObject
 {
     public:
-        void Update();
+        void update();
+        bool addComponent(Component*);
+        bool removeComponent(ComponentType);
     private:
-        Transform mTransform;
-        Component* mComponents;
+        std::unique_ptr<Transform> transform;
+        std::map<ComponentType, std::shared_ptr<Component>> components;
 };
