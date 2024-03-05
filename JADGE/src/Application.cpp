@@ -10,14 +10,12 @@
 #include <memory>
 
 #include "BuildSettings.h"
-#include "JABER.h"
+#include "JABIRenderer.h"
+#include "JABIWindow.h"
 
-const int SCREEN_WIDTH = 1024;
-const int SCREEN_HEIGHT = 768;
-
-SDL_Window* gWindow = NULL;
-
-std::unique_ptr<JABER> gRenderer = NULL;
+// SDL_Window* gWindow = NULL;
+std::unique_ptr<JABIWindow> gWindow = NULL;
+std::unique_ptr<JABIRenderer> gRenderer = NULL;
 
 // Audio
 // - Music
@@ -36,59 +34,57 @@ bool init()
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0)
 	{
 		SDL_Log( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
-		success = false;
+		return false;
+	}
+
+	// set texture filtering to linear
+	if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
+	{
+		SDL_Log("Warning: Linear texture filtering not enabled!");
+	}
+
+	// check for joysticks
+	if(SDL_NumJoysticks() < 1)
+	{
+		SDL_Log("Warning: No joysticks connected!\n");
 	}
 	else
 	{
-		// set texture filtering to linear
-		if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
+		// Load joystick
+		gGameController = SDL_JoystickOpen(0);
+		if(gGameController == NULL)
 		{
-			SDL_Log("Warning: Linear texture filtering not enabled!");
+			SDL_Log("Unable to open game controller! SDL_Error: %s\n", SDL_GetError());
 		}
-
-		// check for joysticks
-		if(SDL_NumJoysticks() < 1)
-		{
-			SDL_Log("Warning: No joysticks connected!\n");
-		}
-		else
-		{
-			// Load joystick
-			gGameController = SDL_JoystickOpen(0);
-			if(gGameController == NULL)
-			{
-				SDL_Log("Unable to open game controller! SDL_Error: %s\n", SDL_GetError());
-			}
-		}
-
-		gWindow = SDL_CreateWindow("JADGE: Just A Dumb Game Engine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-
-		if (gWindow == NULL)
-		{
-			SDL_Log("Window could not be created! SDL_Error: %s\n", SDL_GetError());
-			success = false;
-		}
-
-		gRenderer = std::make_unique<JABER>(new JABER());
-		if (!gRenderer->init(gWindow))
-		{
-			success = false;
-		}
-
-		// Initalize SDL_mixer
-		if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
-		{
-			SDL_Log("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
-			success = false;
-		}
-
-		// Initalize SDL_ttf
-		if(TTF_Init() == -1)
-		{
-			SDL_Log("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
-			success = false;
-		}	
 	}
+
+	gWindow = std::make_unique<JABIWindow>(new JABIWindow());
+	gRenderer = std::make_unique<JABIRenderer>(new JABIRenderer());
+	
+	if (!gWindow->init())
+	{
+		return false;
+	}
+
+	if (!gRenderer->init(gWindow->get_window()))
+	{
+		return false;
+	}
+
+	// Initalize SDL_mixer
+	if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+	{
+		SDL_Log("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+		success = false;
+	}
+
+	// Initalize SDL_ttf
+	if(TTF_Init() == -1)
+	{
+		SDL_Log("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+		success = false;
+	}	
+	
 
 	return success;
 }
@@ -105,7 +101,7 @@ void close()
 
 	// Destroy window
 	gRenderer->close();
-	SDL_DestroyWindow(gWindow);
+	gWindow->close();
 	
 	gWindow = NULL;
 	gRenderer = NULL;

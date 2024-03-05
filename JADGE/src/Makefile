@@ -1,5 +1,5 @@
 # OBJS - specifies which files to compile as part of the project
-OBJS = Application.cpp JABER.cpp
+OBJS = Application.cpp JABIWindow.cpp JABIRenderer.cpp
 
 # CC - specifies which compiler
 CC = g++

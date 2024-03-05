@@ -1,10 +1,11 @@
+#pragma once
 #include <SDL.h>
 
-class JABER
+class JABIRenderer
 {
     public:
-        JABER();
-        JABER(JABER*);
+        JABIRenderer();
+        JABIRenderer(JABIRenderer*);
         bool init(SDL_Window*);
         void close();
         void update();

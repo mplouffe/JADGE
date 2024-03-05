@@ -1,16 +1,16 @@
-#include "JABER.h"
+#include "JABIRenderer.h"
 
-JABER::JABER()
+JABIRenderer::JABIRenderer()
 {
     renderer = NULL;
 }
 
-JABER::JABER(JABER* other)
+JABIRenderer::JABIRenderer(JABIRenderer* other)
 {
     renderer = NULL;
 }
 
-bool JABER::init(SDL_Window* window)
+bool JABIRenderer::init(SDL_Window* window)
 {
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (renderer == NULL)
@@ -24,12 +24,12 @@ bool JABER::init(SDL_Window* window)
     return true;
 }
 
-void JABER::close()
+void JABIRenderer::close()
 {
     SDL_DestroyRenderer(renderer);
 }
 
-void JABER::update()
+void JABIRenderer::update()
 {
     // Clear Screen
     SDL_SetRenderDrawColor(renderer, 0x55, 0xFF, 0xFF, 0xFF);
