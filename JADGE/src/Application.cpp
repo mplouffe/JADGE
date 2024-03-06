@@ -3,6 +3,11 @@
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 
+// IMGUI
+#include "../Dependencies/IMGUI/imgui.h"
+#include "../Dependencies/IMGUI/backends/imgui_impl_sdl2.h"
+#include "../Dependencies/IMGUI/backends/imgui_impl_sdlrenderer2.h"
+
 #include <stdio.h>
 #include <string>
 #include <sstream>
@@ -12,10 +17,6 @@
 #include "BuildSettings.h"
 #include "JABIRenderer.h"
 #include "JABIWindow.h"
-
-// SDL_Window* gWindow = NULL;
-std::unique_ptr<JABIWindow> gWindow = NULL;
-std::unique_ptr<JABIRenderer> gRenderer = NULL;
 
 // Audio
 // - Music
@@ -58,19 +59,6 @@ bool init()
 		}
 	}
 
-	gWindow = std::make_unique<JABIWindow>(new JABIWindow());
-	gRenderer = std::make_unique<JABIRenderer>(new JABIRenderer());
-	
-	if (!gWindow->init())
-	{
-		return false;
-	}
-
-	if (!gRenderer->init(gWindow->get_window()))
-	{
-		return false;
-	}
-
 	// Initalize SDL_mixer
 	if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
@@ -83,9 +71,8 @@ bool init()
 	{
 		SDL_Log("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
 		success = false;
-	}	
+	}
 	
-
 	return success;
 }
 
@@ -99,28 +86,50 @@ void close()
 	SDL_JoystickClose(gGameController);
 	gGameController = NULL;
 
-	// Destroy window
-	gRenderer->close();
-	gWindow->close();
-	
-	gWindow = NULL;
-	gRenderer = NULL;
-
 	// Quit SDL subsystems
 	TTF_Quit();
 	Mix_Quit();
 	IMG_Quit();
 	SDL_Quit();
-}
+} 
 
 int main(int argc, char* args[])
 {
 	//Initialize SDL
 	if(!init())
 	{
-		SDL_Log("Failed to initialize.\n");
+		SDL_Log("Failed to initialize SDL.\n");
 		return 0;
 	}
+
+	auto window = std::make_unique<JABIWindow>(new JABIWindow());
+	auto renderer = std::make_unique<JABIRenderer>(new JABIRenderer());
+
+	if (!window->init())
+	{
+		SDL_Log("Failed to initialize window.\n");
+		return 0;
+	}
+
+	if (!renderer->init(window->get_window()))
+	{
+		SDL_Log("Failed to initialize renderer.\n");
+		return 0;
+	}
+
+	////////////////
+	// IMGUI
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+
+	ImGui::StyleColorsDark();
+	ImGui_ImplSDL2_InitForSDLRenderer(window->get_window(), renderer->get_renderer());
+	ImGui_ImplSDLRenderer2_Init(renderer->get_renderer());
+
+	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 	SDL_Event e;
 	bool quit = false;
@@ -135,9 +144,19 @@ int main(int argc, char* args[])
 			}
 		}
 
-		gRenderer->update();
+/// IMGUI
+		ImGui_ImplSDLRenderer2_NewFrame();
+		ImGui_ImplSDL2_NewFrame();
+		
+		ImGui::NewFrame();
+		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+        ImGui::Text("This is some useful text.");
+		ImGui::End();
+
+		renderer->update();
 	}
 
+	close();
 	return 0;
 }
 

@@ -10,6 +10,12 @@ JABIWindow::JABIWindow(JABIWindow*)
     window = NULL;
 }
 
+JABIWindow::~JABIWindow()
+{
+    SDL_DestroyWindow(window);
+    window = NULL;
+}
+
 bool JABIWindow::init()
 {
     window = SDL_CreateWindow("JADGE: Just Another Dumb Game Engine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
@@ -21,11 +27,6 @@ bool JABIWindow::init()
     }
 
     return true;
-}
-
-void JABIWindow::close()
-{
-    SDL_DestroyWindow(window);
 }
 
 SDL_Window* JABIWindow::get_window()

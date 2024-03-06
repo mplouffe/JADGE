@@ -9,8 +9,8 @@ class JABIWindow
     public:
         JABIWindow();
         JABIWindow(JABIWindow*);
+        ~JABIWindow();
         bool init();
-        void close();
         SDL_Window* get_window();
     private:
         SDL_Window* window;

@@ -10,6 +10,12 @@ JABIRenderer::JABIRenderer(JABIRenderer* other)
     renderer = NULL;
 }
 
+JABIRenderer::~JABIRenderer()
+{
+    SDL_DestroyRenderer(renderer);
+    renderer = NULL;
+}
+
 bool JABIRenderer::init(SDL_Window* window)
 {
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -24,11 +30,6 @@ bool JABIRenderer::init(SDL_Window* window)
     return true;
 }
 
-void JABIRenderer::close()
-{
-    SDL_DestroyRenderer(renderer);
-}
-
 void JABIRenderer::update()
 {
     // Clear Screen
@@ -37,4 +38,9 @@ void JABIRenderer::update()
 
     // Update Screen
     SDL_RenderPresent(renderer);
+}
+
+SDL_Renderer* JABIRenderer::get_renderer()
+{
+    return renderer;
 }
