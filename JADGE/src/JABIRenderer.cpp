@@ -1,5 +1,8 @@
 #include "JABIRenderer.h"
 
+#include "imgui.h"
+#include "backends/imgui_impl_sdlrenderer2.h"
+
 JABIRenderer::JABIRenderer()
 {
     renderer = NULL;
@@ -35,6 +38,8 @@ void JABIRenderer::update()
     // Clear Screen
     SDL_SetRenderDrawColor(renderer, 0x55, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(renderer);
+
+    ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
 
     // Update Screen
     SDL_RenderPresent(renderer);

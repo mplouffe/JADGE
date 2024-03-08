@@ -1,11 +1,13 @@
+IMGUI_DIR = E:\dev_lib\IMGUI
+
 # OBJS - specifies which files to compile as part of the project
-OBJS = Application.cpp JABIWindow.cpp JABIRenderer.cpp
+OBJS = Application.cpp JABIWindow.cpp JABIRenderer.cpp $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_demo.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_tables.cpp $(IMGUI_DIR)/imgui_widgets.cpp $(IMGUI_DIR)/backends/imgui_impl_sdl2.cpp $(IMGUI_DIR)/backends/imgui_impl_sdlrenderer2.cpp 
 
 # CC - specifies which compiler
 CC = g++
 
 # INCLUDE_PATHS - specifies additional include paths
-INCLUDE_PATHS = -IE:\dev_lib\SDL2-2.26.2\i686-w64-mingw32\include\SDL2 -IE:\dev_lib\SDL2_image-2.6.2\i686-w64-mingw32\include\SDL2 -IE:\dev_lib\SDL2_ttf-2.20.1\i686-w64-mingw32\include\SDL2 -IE:\dev_lib\SDL2_mixer-2.6.3\i686-w64-mingw32\include\SDL2
+INCLUDE_PATHS = -IE:\dev_lib\SDL2-2.26.2\i686-w64-mingw32\include\SDL2 -IE:\dev_lib\SDL2_image-2.6.2\i686-w64-mingw32\include\SDL2 -IE:\dev_lib\SDL2_ttf-2.20.1\i686-w64-mingw32\include\SDL2 -IE:\dev_lib\SDL2_mixer-2.6.3\i686-w64-mingw32\include\SDL2 -IE:\dev_lib\IMGUI -IE:\dev_lib\IMGUI\backends
 
 # LIBRARY_PATHS - specifies additional library paths
 LIBRARY_PATHS = -LE:\dev_lib\SDL2-2.26.2\i686-w64-mingw32\lib -LE:\dev_lib\SDL2_image-2.6.2\i686-w64-mingw32\lib -LE:\dev_lib\SDL2_ttf-2.20.1\i686-w64-mingw32\lib -LE:\dev_lib\SDL2_mixer-2.6.3\i686-w64-mingw32\lib

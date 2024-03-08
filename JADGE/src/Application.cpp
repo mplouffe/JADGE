@@ -4,9 +4,9 @@
 #include <SDL_mixer.h>
 
 // IMGUI
-#include "../Dependencies/IMGUI/imgui.h"
-#include "../Dependencies/IMGUI/backends/imgui_impl_sdl2.h"
-#include "../Dependencies/IMGUI/backends/imgui_impl_sdlrenderer2.h"
+#include "imgui.h"
+#include "backends/imgui_impl_sdl2.h"
+#include "backends/imgui_impl_sdlrenderer2.h"
 
 #include <stdio.h>
 #include <string>
@@ -86,6 +86,11 @@ void close()
 	SDL_JoystickClose(gGameController);
 	gGameController = NULL;
 
+	// SHUTDOWN IMGUI
+	ImGui_ImplSDLRenderer2_Shutdown();
+    ImGui_ImplSDL2_Shutdown();
+    ImGui::DestroyContext();
+
 	// Quit SDL subsystems
 	TTF_Quit();
 	Mix_Quit();
@@ -93,7 +98,7 @@ void close()
 	SDL_Quit();
 } 
 
-int main(int argc, char* args[])
+int main(int argc, char* [])
 {
 	//Initialize SDL
 	if(!init())
@@ -149,9 +154,11 @@ int main(int argc, char* args[])
 		ImGui_ImplSDL2_NewFrame();
 		
 		ImGui::NewFrame();
-		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-        ImGui::Text("This is some useful text.");
+		ImGui::Begin("J_A_D_G_E");                          // Create a window called "Hello, world!" and append into it.
+        ImGui::Text("Hello World! It's ya boy... JA_BIGE!!! \\O.o/");
 		ImGui::End();
+
+		ImGui::Render();
 
 		renderer->update();
 	}
