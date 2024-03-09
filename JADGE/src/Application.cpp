@@ -16,15 +16,13 @@
 #include "JABIRenderer.h"
 #include "JABIWindow.h"
 #include "JABIGUI.h"
+#include "JABIControls.h"
 
 // Audio
 // - Music
 // Mix_Music *gMusic;
 // - SFX
 Mix_Chunk *gSelect;
-
-// Input
-SDL_Joystick* gGameController = NULL;
 
 bool init()
 {
@@ -41,21 +39,6 @@ bool init()
 	if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
 	{
 		SDL_Log("Warning: Linear texture filtering not enabled!");
-	}
-
-	// check for joysticks
-	if(SDL_NumJoysticks() < 1)
-	{
-		SDL_Log("Warning: No joysticks connected!\n");
-	}
-	else
-	{
-		// Load joystick
-		gGameController = SDL_JoystickOpen(0);
-		if(gGameController == NULL)
-		{
-			SDL_Log("Unable to open game controller! SDL_Error: %s\n", SDL_GetError());
-		}
 	}
 
 	// Initalize SDL_mixer
@@ -85,10 +68,6 @@ void close()
 	Mix_FreeChunk(gSelect);
 	gSelect = NULL;
 
-	// close game controller
-	SDL_JoystickClose(gGameController);
-	gGameController = NULL;
-
 	// Quit SDL subsystems
 	TTF_Quit();
 	Mix_Quit();
@@ -108,35 +87,17 @@ int main(int argc, char* [])
 	auto window = std::make_unique<JABIWindow>(new JABIWindow());
 	auto renderer = std::make_unique<JABIRenderer>(new JABIRenderer());
 	auto imgui = std::make_unique<JABIGUI>(new JABIGUI());
+	auto controls = std::make_unique<JABIControls>(new JABIControls());
 
-	if (!window->init())
-	{
-		SDL_Log("Failed to initialize window.\n");
-		return 0;
-	}
-
-	if (!renderer->init(window->get_window()))
-	{
-		SDL_Log("Failed to initialize renderer.\n");
-		return 0;
-	}
-
+	if (!window->init()) return 0;
+	if (!renderer->init(window->get_window())) return 0;
 	imgui->init(window->get_window(), renderer->get_renderer());
+	controls->init();
 
-	SDL_Event e;
 	bool quit = false;
-
 	while(!quit)
 	{
-		while(SDL_PollEvent(&e))
-		{ 
-			ImGui_ImplSDL2_ProcessEvent(&e);
-			if(e.type == SDL_QUIT)
-			{
-				quit = true;
-			}
-		}
-
+		controls->update(quit);
 		imgui->render();
 		renderer->update();
 	}
