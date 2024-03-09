@@ -1,22 +1,23 @@
 #include "JABIRenderer.h"
+#include <utility>
 
 #include "imgui.h"
 #include "backends/imgui_impl_sdlrenderer2.h"
 
 JABIRenderer::JABIRenderer()
 {
-    renderer = NULL;
+    renderer = nullptr;
 }
 
 JABIRenderer::JABIRenderer(JABIRenderer* other)
 {
-    renderer = NULL;
+    renderer = std::move(other->renderer);
 }
 
 JABIRenderer::~JABIRenderer()
 {
     SDL_DestroyRenderer(renderer);
-    renderer = NULL;
+    renderer = nullptr;
 }
 
 bool JABIRenderer::init(SDL_Window* window)

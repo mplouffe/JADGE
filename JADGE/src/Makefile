@@ -1,7 +1,7 @@
 IMGUI_DIR = E:\dev_lib\IMGUI
 
 # OBJS - specifies which files to compile as part of the project
-OBJS = Application.cpp JABIWindow.cpp JABIRenderer.cpp $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_demo.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_tables.cpp $(IMGUI_DIR)/imgui_widgets.cpp $(IMGUI_DIR)/backends/imgui_impl_sdl2.cpp $(IMGUI_DIR)/backends/imgui_impl_sdlrenderer2.cpp 
+OBJS = Application.cpp JABIWindow.cpp JABIRenderer.cpp JABIGUI.cpp $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_demo.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_tables.cpp $(IMGUI_DIR)/imgui_widgets.cpp $(IMGUI_DIR)/backends/imgui_impl_sdl2.cpp $(IMGUI_DIR)/backends/imgui_impl_sdlrenderer2.cpp 
 
 # CC - specifies which compiler
 CC = g++

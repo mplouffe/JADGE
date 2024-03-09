@@ -4,9 +4,7 @@
 #include <SDL_mixer.h>
 
 // IMGUI
-#include "imgui.h"
 #include "backends/imgui_impl_sdl2.h"
-#include "backends/imgui_impl_sdlrenderer2.h"
 
 #include <stdio.h>
 #include <string>
@@ -17,6 +15,7 @@
 #include "BuildSettings.h"
 #include "JABIRenderer.h"
 #include "JABIWindow.h"
+#include "JABIGUI.h"
 
 // Audio
 // - Music
@@ -72,6 +71,10 @@ bool init()
 		SDL_Log("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
 		success = false;
 	}
+
+	// Context needs to be created prior to making a JABIGUI
+    IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
 	
 	return success;
 }
@@ -85,11 +88,6 @@ void close()
 	// close game controller
 	SDL_JoystickClose(gGameController);
 	gGameController = NULL;
-
-	// SHUTDOWN IMGUI
-	ImGui_ImplSDLRenderer2_Shutdown();
-    ImGui_ImplSDL2_Shutdown();
-    ImGui::DestroyContext();
 
 	// Quit SDL subsystems
 	TTF_Quit();
@@ -109,6 +107,7 @@ int main(int argc, char* [])
 
 	auto window = std::make_unique<JABIWindow>(new JABIWindow());
 	auto renderer = std::make_unique<JABIRenderer>(new JABIRenderer());
+	auto imgui = std::make_unique<JABIGUI>(new JABIGUI());
 
 	if (!window->init())
 	{
@@ -122,19 +121,7 @@ int main(int argc, char* [])
 		return 0;
 	}
 
-	////////////////
-	// IMGUI
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
-
-	ImGui::StyleColorsDark();
-	ImGui_ImplSDL2_InitForSDLRenderer(window->get_window(), renderer->get_renderer());
-	ImGui_ImplSDLRenderer2_Init(renderer->get_renderer());
-
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	imgui->init(window->get_window(), renderer->get_renderer());
 
 	SDL_Event e;
 	bool quit = false;
@@ -143,23 +130,14 @@ int main(int argc, char* [])
 	{
 		while(SDL_PollEvent(&e))
 		{ 
+			ImGui_ImplSDL2_ProcessEvent(&e);
 			if(e.type == SDL_QUIT)
 			{
 				quit = true;
 			}
 		}
 
-/// IMGUI
-		ImGui_ImplSDLRenderer2_NewFrame();
-		ImGui_ImplSDL2_NewFrame();
-		
-		ImGui::NewFrame();
-		ImGui::Begin("J_A_D_G_E");                          // Create a window called "Hello, world!" and append into it.
-        ImGui::Text("Hello World! It's ya boy... JA_BIGE!!! \\O.o/");
-		ImGui::End();
-
-		ImGui::Render();
-
+		imgui->render();
 		renderer->update();
 	}
 
