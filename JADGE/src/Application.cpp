@@ -12,11 +12,13 @@
 #include <cmath>
 #include <memory>
 
-#include "BuildSettings.h"
 #include "JABIRenderer.h"
 #include "JABIWindow.h"
 #include "JABIGUI.h"
 #include "JABIControls.h"
+#include "Sprite.h"
+#include "Scene.h"
+#include "GameObject.h"
 
 // Audio
 // - Music
@@ -94,12 +96,22 @@ int main(int argc, char* [])
 	imgui->init(window->get_window(), renderer->get_renderer());
 	controls->init();
 
+	auto scene = std::make_unique<Scene>(new Scene());
+	auto gameObject = new GameObject();
+	auto sprite = new Sprite();
+	sprite->loadFromFile("../assets/sprites/plane.png", renderer->get_renderer());
+	gameObject->addComponent(ComponentType::SPRITE, sprite);
+	scene->add_gameobject(gameObject);
+
 	bool quit = false;
 	while(!quit)
 	{
 		controls->update(quit);
+		scene->update();
 		imgui->render();
-		renderer->update();
+		renderer->pre_render();
+		renderer->update(scene->get_renderables());
+		renderer->render();
 	}
 
 	close();

@@ -1,12 +1,14 @@
 #pragma once
 #include "Component.h"
+#include "Renderable.h"
+#include "Transform.h"
 
 #include <string>
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <memory>
 
-class Sprite : public Component
+class Sprite : public Component, public Renderable
 {
     public:
         Sprite();
@@ -21,8 +23,16 @@ class Sprite : public Component
         // void render(std::tuple<int, int> aPosition, SDL_Rect* aClip = NULL);
         int getWidth();
         int getHeight();
+        void update();
+        void set_parent(GameObject& parent);
+        SDL_Texture* get_texture();
+        SDL_Rect* get_clip();
+        GameObject* get_gameobject();
+        const SDL_Rect* get_render_quad();
     private:
         SDL_Texture* mTexture;
         int mWidth;
         int mHeight;
+        SDL_Rect* m_clip;
+        Transform* m_transform;
 };

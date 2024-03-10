@@ -1,5 +1,18 @@
 #include "GameObject.h"
 
+#include <SDL.h>
+#include <memory>
+#include "Sprite.h"
+
+GameObject::GameObject()
+{
+    transform = std::unique_ptr<Transform>(new Transform());
+}
+
+GameObject::GameObject(GameObject* other)
+    : components(std::move(other->components)), transform(std::move(other->transform))
+{ }
+
 void GameObject::update()
 {
     for(const auto& [_, value] : components)
@@ -8,17 +21,31 @@ void GameObject::update()
     }
 }
 
-bool GameObject::addComponent(Component* component)
+bool GameObject::addComponent(ComponentType type, Component* component)
 {
-    if (components.find(component->getComponentType()) == components.end())
+    if (components.find(type) == components.end())
     {
-        return components.insert(std::pair{component->getComponentType(), std::make_shared<Component>(component)}).second;
+        component->set_parent(*this);
+        return components.insert(std::pair{type, component}).second;
     }
-
+    
     return false;
 }
 
 bool GameObject::removeComponent(ComponentType componentToRemove)
 {
     return components.erase(componentToRemove) > 0;
+}
+
+Renderable* GameObject::get_renderables()
+{
+    if (components.find(ComponentType::SPRITE) != components.end())
+    {
+        return (Sprite*)(components.at(ComponentType::SPRITE));
+    }
+}
+
+Transform* GameObject::get_transform()
+{
+    return transform.get();
 }

@@ -1,6 +1,7 @@
 #include <SDL_image.h>
 
 #include "Sprite.h"
+#include "GameObject.h"
 
 Sprite::Sprite()
 {
@@ -140,3 +141,36 @@ int Sprite::getHeight()
 {
     return mHeight;
 }
+
+void Sprite::update()
+{ }
+
+SDL_Texture* Sprite::get_texture()
+{
+    return mTexture;
+}
+
+SDL_Rect* Sprite::get_clip()
+{
+    return m_clip;
+}
+
+const SDL_Rect * Sprite::get_render_quad()
+{
+    int x;
+    int y;
+    std::tie(x, y) = m_transform->getPosition();
+    SDL_Rect renderQuad = {x, y, mWidth, mHeight};
+    if (m_clip != NULL)
+    {
+        renderQuad.w = m_clip->w;
+        renderQuad.h = m_clip->h;
+    }
+    return &renderQuad;
+}
+
+void Sprite::set_parent(GameObject& parent)
+{
+    m_transform = parent.get_transform();
+}
+

@@ -34,14 +34,24 @@ bool JABIRenderer::init(SDL_Window* window)
     return true;
 }
 
-void JABIRenderer::update()
+void JABIRenderer::pre_render()
 {
     // Clear Screen
     SDL_SetRenderDrawColor(renderer, 0x55, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(renderer);
+}
 
+void JABIRenderer::update(std::vector<Renderable*> renderables)
+{
+    for(auto renderable : renderables)
+    {
+        SDL_RenderCopy(renderer, renderable->get_texture(), renderable->get_clip(), renderable->get_render_quad());
+    }
+}
+
+void JABIRenderer::render()
+{
     ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
-
     // Update Screen
     SDL_RenderPresent(renderer);
 }

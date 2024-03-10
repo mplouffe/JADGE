@@ -1,6 +1,8 @@
 #pragma once
 #include <utility>
+#include <vector>
 #include <SDL.h>
+#include "Renderable.h"
 
 class JABIRenderer
 {
@@ -10,7 +12,9 @@ class JABIRenderer
         JABIRenderer(JABIRenderer*);
         ~JABIRenderer();
         bool init(SDL_Window*);
-        void update();
+        void pre_render();
+        void update(std::vector<Renderable*>);
+        void render();
         SDL_Renderer* get_renderer();
     private:
         SDL_Renderer* renderer;

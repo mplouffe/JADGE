@@ -1,10 +1,14 @@
 #include "Transform.h"
+#include "GameObject.h"
 
 Transform::Transform()
 {
     mX = 0;
     mY = 0;
 }
+
+Transform::Transform(Transform* other)
+ : mX(other->mX), mY(other->mY) { };
 
 ComponentType Transform::getComponentType()
 {
@@ -20,3 +24,7 @@ void Transform::movePosition(std::tuple<int, int> aNewPosition)
 {
     std::tie(mX, mY) = aNewPosition;
 }
+
+void Transform::update() {};
+
+void Transform::set_parent(GameObject& _) {};
