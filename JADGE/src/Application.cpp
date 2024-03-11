@@ -86,6 +86,7 @@ int main(int argc, char* [])
 		return 0;
 	}
 
+	// Start the Engine
 	auto window = std::make_unique<JABIWindow>(new JABIWindow());
 	auto renderer = std::make_unique<JABIRenderer>(new JABIRenderer());
 	auto imgui = std::make_unique<JABIGUI>(new JABIGUI());
@@ -95,14 +96,19 @@ int main(int argc, char* [])
 	if (!renderer->init(window->get_window())) return 0;
 	imgui->init(window->get_window(), renderer->get_renderer());
 	controls->init();
+	// VrOOm VrOOm.
 
+	// Create the Game World
 	auto scene = std::make_unique<Scene>(new Scene());
 	auto gameObject = new GameObject();
 	auto sprite = new Sprite();
 	sprite->loadFromFile("../assets/sprites/plane.png", renderer->get_renderer());
+	sprite->set_size(10, 10);
 	gameObject->addComponent(ComponentType::SPRITE, sprite);
 	scene->add_gameobject(gameObject);
+	// bEEp bOOp
 
+	// Games Games Games
 	bool quit = false;
 	while(!quit)
 	{
@@ -113,6 +119,7 @@ int main(int argc, char* [])
 		renderer->update(scene->get_renderables());
 		renderer->render();
 	}
+	// Win Win Win!!!
 
 	close();
 	return 0;

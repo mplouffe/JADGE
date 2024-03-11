@@ -6,7 +6,7 @@
 
 GameObject::GameObject()
 {
-    transform = std::unique_ptr<Transform>(new Transform());
+    transform = std::shared_ptr<Transform>(new Transform());
 }
 
 GameObject::GameObject(GameObject* other)
@@ -45,7 +45,7 @@ Renderable* GameObject::get_renderables()
     }
 }
 
-Transform* GameObject::get_transform()
+std::shared_ptr<Transform> GameObject::get_transform()
 {
-    return transform.get();
+    return transform;
 }

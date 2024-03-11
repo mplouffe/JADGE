@@ -20,19 +20,18 @@ class Sprite : public Component, public Renderable
         // void setColor(Uint8 red, Uint8 green, Uint8 blue);
         void setBlendMode(SDL_BlendMode aBlending);
         void setAlpha(Uint8 aNewAlpha);
-        // void render(std::tuple<int, int> aPosition, SDL_Rect* aClip = NULL);
         int getWidth();
         int getHeight();
+        void set_size(int height, int width);
         void update();
         void set_parent(GameObject& parent);
         SDL_Texture* get_texture();
         SDL_Rect* get_clip();
-        GameObject* get_gameobject();
         const SDL_Rect* get_render_quad();
     private:
-        SDL_Texture* mTexture;
-        int mWidth;
-        int mHeight;
+        std::weak_ptr<Transform> m_transform;
+        SDL_Texture* m_texture;
+        int m_width;
+        int m_height;
         SDL_Rect* m_clip;
-        Transform* m_transform;
 };

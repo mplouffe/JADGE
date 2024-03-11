@@ -6,9 +6,9 @@
 Sprite::Sprite()
 {
     // Initialize
-    mTexture = NULL;
-    mWidth = 0;
-    mHeight = 0;
+    m_texture = NULL;
+    m_width = 0;
+    m_height = 0;
 }
 
 Sprite::~Sprite()
@@ -49,16 +49,16 @@ bool Sprite::loadFromFile(std::string path, SDL_Renderer* renderer)
         else
         {
             // get image dimensions
-            mWidth = loadedSurface->w;
-            mHeight = loadedSurface->h;
+            m_width = loadedSurface->w;
+            m_height = loadedSurface->h;
         }
 
         SDL_FreeSurface(loadedSurface);
     }
 
     // return sucess
-    mTexture = newTexture;
-    return mTexture != NULL;
+    m_texture = newTexture;
+    return m_texture != NULL;
 }
 
 bool Sprite::loadFromRenderedText(std::string aTextureText, SDL_Color aTextColor, SDL_Renderer* aRenderer, TTF_Font* aFont)
@@ -75,71 +75,55 @@ bool Sprite::loadFromRenderedText(std::string aTextureText, SDL_Color aTextColor
     else
     {
         // Create texture from surface pixels
-        mTexture = SDL_CreateTextureFromSurface(aRenderer, textSurface);
-        if (mTexture == NULL)
+        m_texture = SDL_CreateTextureFromSurface(aRenderer, textSurface);
+        if (m_texture == NULL)
         {
             SDL_Log("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
         }
         else
         {
             // Get image dimensions
-            mWidth = textSurface->w;
-            mHeight = textSurface->h;
+            m_width = textSurface->w;
+            m_height = textSurface->h;
         }
 
         // Get rid of old surface
         SDL_FreeSurface(textSurface);
     }
 
-    return mTexture != NULL;
+    return m_texture != NULL;
 }
 
 void Sprite::free()
 {
     // free texture if it exists
-    if (mTexture != NULL)
+    if (m_texture != NULL)
     {
-        SDL_DestroyTexture(mTexture);
-        mTexture = NULL;
-        mWidth = 0;
-        mHeight = 0;
+        SDL_DestroyTexture(m_texture);
+        m_texture = NULL;
+        m_width = 0;
+        m_height = 0;
     }
 }
 
 void Sprite::setAlpha(Uint8 newAlpha)
 {
-    SDL_SetTextureAlphaMod(mTexture, newAlpha);
+    SDL_SetTextureAlphaMod(m_texture, newAlpha);
 }
 
 void Sprite::setBlendMode(SDL_BlendMode blending)
 {
-    SDL_SetTextureBlendMode(mTexture, blending);
+    SDL_SetTextureBlendMode(m_texture, blending);
 }
-
-// void Sprite::render(std::tuple<int, int> position, SDL_Rect* clip)
-// {
-//     // set rendering pspace and render to screen
-//     int x;
-//     int y;
-//     std::tie(x, y) = position;
-//     SDL_Rect renderQuad = {x, y, mWidth, mHeight};
-//     if (clip != NULL)
-//     {
-//         renderQuad.w = clip->w;
-//         renderQuad.h = clip->h;
-//     }
-
-//     SDL_RenderCopy(mRenderer.get(), mTexture.get(), clip, &renderQuad);
-// }
 
 int Sprite::getWidth()
 {
-    return mWidth;
+    return m_width;
 }
 
 int Sprite::getHeight()
 {
-    return mHeight;
+    return m_height;
 }
 
 void Sprite::update()
@@ -147,7 +131,7 @@ void Sprite::update()
 
 SDL_Texture* Sprite::get_texture()
 {
-    return mTexture;
+    return m_texture;
 }
 
 SDL_Rect* Sprite::get_clip()
@@ -159,18 +143,24 @@ const SDL_Rect * Sprite::get_render_quad()
 {
     int x;
     int y;
-    std::tie(x, y) = m_transform->getPosition();
-    SDL_Rect renderQuad = {x, y, mWidth, mHeight};
+    std::tie(x, y) = m_transform.lock().get()->getPosition();
+    SDL_Rect m_render_quad = {x, y, m_width, m_height};
     if (m_clip != NULL)
     {
-        renderQuad.w = m_clip->w;
-        renderQuad.h = m_clip->h;
+        m_render_quad.w = m_clip->w;
+        m_render_quad.h = m_clip->h;
     }
-    return &renderQuad;
+    return &m_render_quad;
 }
 
 void Sprite::set_parent(GameObject& parent)
 {
     m_transform = parent.get_transform();
+}
+
+void Sprite::set_size(int width, int height)
+{
+    m_width = width;
+    m_height = height;
 }
 

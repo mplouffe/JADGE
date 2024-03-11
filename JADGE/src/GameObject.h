@@ -15,8 +15,8 @@ class GameObject
         bool addComponent(ComponentType, Component*);
         bool removeComponent(ComponentType);
         Renderable* get_renderables();
-        Transform* get_transform();
+        std::shared_ptr<Transform> get_transform();
     private:
-        std::unique_ptr<Transform> transform;
+        std::shared_ptr<Transform> transform;
         std::map<ComponentType, Component*> components;
 };
