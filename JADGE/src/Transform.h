@@ -12,7 +12,8 @@ class Transform : public Component
         Transform(Transform*);
         ComponentType getComponentType();
         const std::tuple<int, int> getPosition();
-        void movePosition(std::tuple<int, int> aNewPosition);
+        void movePosition(int, int);
+        void movePosition(std::tuple<int, int>);
         void update();
         void set_parent(GameObject&);
     private:

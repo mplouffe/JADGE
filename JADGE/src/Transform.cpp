@@ -25,6 +25,12 @@ void Transform::movePosition(std::tuple<int, int> aNewPosition)
     std::tie(mX, mY) = aNewPosition;
 }
 
+void Transform::movePosition(int newX, int newY)
+{
+    mX = newX;
+    mY = newY;
+}
+
 void Transform::update() {};
 
 void Transform::set_parent(GameObject& _) {};

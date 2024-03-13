@@ -144,7 +144,7 @@ const SDL_Rect * Sprite::get_render_quad()
     int x;
     int y;
     std::tie(x, y) = m_transform.lock().get()->getPosition();
-    SDL_Rect m_render_quad = {x, y, m_width, m_height};
+    m_render_quad = {x, y, m_width, m_height};
     if (m_clip != NULL)
     {
         m_render_quad.w = m_clip->w;

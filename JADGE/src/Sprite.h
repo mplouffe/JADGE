@@ -34,4 +34,5 @@ class Sprite : public Component, public Renderable
         int m_width;
         int m_height;
         SDL_Rect* m_clip;
+        SDL_Rect m_render_quad;
 };

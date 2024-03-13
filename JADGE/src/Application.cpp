@@ -103,8 +103,8 @@ int main(int argc, char* [])
 	auto gameObject = new GameObject();
 	auto sprite = new Sprite();
 	sprite->loadFromFile("../assets/sprites/plane.png", renderer->get_renderer());
-	sprite->set_size(10, 10);
 	gameObject->addComponent(ComponentType::SPRITE, sprite);
+	gameObject->get_transform()->movePosition(130, 150);
 	scene->add_gameobject(gameObject);
 	// bEEp bOOp
 
