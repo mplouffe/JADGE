@@ -38,7 +38,7 @@ bool init()
 	}
 
 	// set texture filtering to linear
-	if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
+	if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0"))
 	{
 		SDL_Log("Warning: Linear texture filtering not enabled!");
 	}
@@ -102,9 +102,14 @@ int main(int argc, char* [])
 	auto scene = std::make_unique<Scene>(new Scene());
 	auto gameObject = new GameObject();
 	auto sprite = new Sprite();
-	sprite->load_from_file("../assets/sprites/plane.png", renderer->get_renderer());
+	sprite->load_from_file("../assets/sprites/ChewieSpriteSheet.png", renderer->get_renderer());
+	SDL_Rect sprite_clip = { 0, 0, 36, 36 };
+	sprite->set_clip(sprite_clip);
+	sprite->set_size(150, 150);
+	
 	gameObject->addComponent(ComponentType::SPRITE, sprite);
 	gameObject->get_transform()->movePosition(130, 150);
+	
 	scene->add_gameobject(gameObject);
 	// bEEp bOOp
 

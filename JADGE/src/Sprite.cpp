@@ -145,11 +145,6 @@ const SDL_Rect * Sprite::get_render_quad()
     int y;
     std::tie(x, y) = m_transform.lock().get()->getPosition();
     m_render_quad = {x, y, m_width, m_height};
-    if (m_clip != NULL)
-    {
-        m_render_quad.w = m_clip->w;
-        m_render_quad.h = m_clip->h;
-    }
     return &m_render_quad;
 }
 
@@ -164,8 +159,8 @@ void Sprite::set_size(int width, int height)
     m_height = height;
 }
 
-void Sprite::set_clip(SDL_Rect* new_clip)
+void Sprite::set_clip(SDL_Rect& new_clip)
 {
-    m_clip = std::move(new_clip);
+    m_clip = new SDL_Rect(new_clip);
 }
 

@@ -13,8 +13,7 @@ class SpriteAnimator : public Component
     public:
         SpriteAnimator();
         SpriteAnimator(SpriteAnimator*);
-        ~SpriteAnimator();
-        
+        ~SpriteAnimator();      
         void update();
     private:
         std::vector<AnimationKeyFrame> m_key_frames;

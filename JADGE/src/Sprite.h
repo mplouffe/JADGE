@@ -20,7 +20,7 @@ class Sprite : public Component, public Renderable
         // void setColor(Uint8 red, Uint8 green, Uint8 blue);
         void set_blend_mode(SDL_BlendMode);
         void set_alpha(Uint8);
-        void set_clip(SDL_Rect*);
+        void set_clip(SDL_Rect&);
         int get_width();
         int get_height();
         void set_size(int, int);
