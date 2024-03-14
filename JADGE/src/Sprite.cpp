@@ -17,12 +17,12 @@ Sprite::~Sprite()
     free();
 }
 
-ComponentType Sprite::getComponentType()
+ComponentType Sprite::get_component_type()
 {
     return ComponentType::SPRITE;
 }
 
-bool Sprite::loadFromFile(std::string path, SDL_Renderer* renderer)
+bool Sprite::load_from_file(std::string path, SDL_Renderer* renderer)
 {
     // get rid of pre-existing texture
     free();
@@ -61,7 +61,7 @@ bool Sprite::loadFromFile(std::string path, SDL_Renderer* renderer)
     return m_texture != NULL;
 }
 
-bool Sprite::loadFromRenderedText(std::string aTextureText, SDL_Color aTextColor, SDL_Renderer* aRenderer, TTF_Font* aFont)
+bool Sprite::load_from_rendered_text(std::string aTextureText, SDL_Color aTextColor, SDL_Renderer* aRenderer, TTF_Font* aFont)
 {
     // Get rid of preexisting texture
     free();
@@ -106,22 +106,22 @@ void Sprite::free()
     }
 }
 
-void Sprite::setAlpha(Uint8 newAlpha)
+void Sprite::set_alpha(Uint8 newAlpha)
 {
     SDL_SetTextureAlphaMod(m_texture, newAlpha);
 }
 
-void Sprite::setBlendMode(SDL_BlendMode blending)
+void Sprite::set_blend_mode(SDL_BlendMode blending)
 {
     SDL_SetTextureBlendMode(m_texture, blending);
 }
 
-int Sprite::getWidth()
+int Sprite::get_width()
 {
     return m_width;
 }
 
-int Sprite::getHeight()
+int Sprite::get_height()
 {
     return m_height;
 }
@@ -162,5 +162,10 @@ void Sprite::set_size(int width, int height)
 {
     m_width = width;
     m_height = height;
+}
+
+void Sprite::set_clip(SDL_Rect* new_clip)
+{
+    m_clip = std::move(new_clip);
 }
 

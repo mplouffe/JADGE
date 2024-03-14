@@ -10,7 +10,7 @@ class Transform : public Component
     public:
         Transform();
         Transform(Transform*);
-        ComponentType getComponentType();
+        ComponentType get_component_type();
         const std::tuple<int, int> getPosition();
         void movePosition(int, int);
         void movePosition(std::tuple<int, int>);

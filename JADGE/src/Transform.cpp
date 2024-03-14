@@ -10,7 +10,7 @@ Transform::Transform()
 Transform::Transform(Transform* other)
  : mX(other->mX), mY(other->mY) { };
 
-ComponentType Transform::getComponentType()
+ComponentType Transform::get_component_type()
 {
     return ComponentType::TRANSFORM;
 }
