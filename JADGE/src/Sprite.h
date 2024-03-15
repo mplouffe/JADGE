@@ -2,6 +2,7 @@
 #include "Component.h"
 #include "Renderable.h"
 #include "Transform.h"
+#include "SpriteAnimator.h"
 
 #include <string>
 #include <SDL.h>
@@ -31,6 +32,7 @@ class Sprite : public Component, public Renderable
         const SDL_Rect* get_render_quad();
     private:
         std::weak_ptr<Transform> m_transform;
+        std::unique_ptr<SpriteAnimator> m_animator;
         SDL_Texture* m_texture;
         int m_width;
         int m_height;
