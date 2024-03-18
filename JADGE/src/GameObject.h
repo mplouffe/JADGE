@@ -12,11 +12,12 @@ class GameObject
         GameObject();
         GameObject(GameObject*);
         void update();
-        bool addComponent(ComponentType, Component*);
-        bool removeComponent(ComponentType);
+        bool add_component(ComponentType, Component*);
+        bool remove_component(ComponentType);
+        void move(int, int);
         Renderable* get_renderables();
-        std::shared_ptr<Transform> get_transform();
+        const Transform& get_transform();
     private:
-        std::shared_ptr<Transform> transform;
+        std::unique_ptr<Transform> transform;
         std::map<ComponentType, Component*> components;
 };

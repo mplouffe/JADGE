@@ -1,12 +1,12 @@
 #include <SDL_image.h>
 
 #include "Sprite.h"
-#include "GameObject.h"
 
-Sprite::Sprite()
+Sprite::Sprite(const Transform& transform)
+ : m_transform(transform)
 {
-    // Initialize
-    m_texture = NULL;
+    m_animator = nullptr;
+    m_texture = nullptr;
     m_width = 0;
     m_height = 0;
 }
@@ -28,7 +28,7 @@ bool Sprite::load_from_file(std::string path, SDL_Renderer* renderer)
     free();
 
     // the final texture
-    SDL_Texture* newTexture = NULL;
+    SDL_Texture* newTexture = nullptr;
 
     SDL_Surface* loadedSurface = IMG_Load(path.c_str());
     if (loadedSurface == NULL)
@@ -127,7 +127,12 @@ int Sprite::get_height()
 }
 
 void Sprite::update()
-{ }
+{ 
+    if (m_animator != nullptr)
+    {
+        m_animator->update();
+    }
+}
 
 SDL_Texture* Sprite::get_texture()
 {
@@ -136,21 +141,20 @@ SDL_Texture* Sprite::get_texture()
 
 SDL_Rect* Sprite::get_clip()
 {
+    if (m_animator != nullptr)
+    {
+        m_clip = m_animator->get_current_clip();
+    }
     return m_clip;
 }
 
-const SDL_Rect * Sprite::get_render_quad()
+const SDL_Rect* Sprite::get_render_quad()
 {
     int x;
     int y;
-    std::tie(x, y) = m_transform.lock().get()->getPosition();
+    std::tie(x, y) = m_transform.get_position();
     m_render_quad = {x, y, m_width, m_height};
     return &m_render_quad;
-}
-
-void Sprite::set_parent(GameObject& parent)
-{
-    m_transform = parent.get_transform();
 }
 
 void Sprite::set_size(int width, int height)
@@ -164,3 +168,7 @@ void Sprite::set_clip(SDL_Rect& new_clip)
     m_clip = new SDL_Rect(new_clip);
 }
 
+void Sprite::add_animator(SpriteAnimator* animator)
+{
+    m_animator = std::make_unique<SpriteAnimator>(animator);
+}

@@ -6,7 +6,7 @@
 
 GameObject::GameObject()
 {
-    transform = std::shared_ptr<Transform>(new Transform());
+    transform = std::unique_ptr<Transform>(new Transform());
 }
 
 GameObject::GameObject(GameObject* other)
@@ -21,18 +21,17 @@ void GameObject::update()
     }
 }
 
-bool GameObject::addComponent(ComponentType type, Component* component)
+bool GameObject::add_component(ComponentType type, Component* component)
 {
     if (components.find(type) == components.end())
     {
-        component->set_parent(*this);
         return components.insert(std::pair{type, component}).second;
     }
     
     return false;
 }
 
-bool GameObject::removeComponent(ComponentType componentToRemove)
+bool GameObject::remove_component(ComponentType componentToRemove)
 {
     return components.erase(componentToRemove) > 0;
 }
@@ -45,7 +44,12 @@ Renderable* GameObject::get_renderables()
     }
 }
 
-std::shared_ptr<Transform> GameObject::get_transform()
+const Transform& GameObject::get_transform()
 {
-    return transform;
+    return *transform;
+}
+
+void GameObject::move(int x, int y)
+{
+    transform->move_position(x, y);
 }

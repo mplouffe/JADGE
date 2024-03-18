@@ -12,7 +12,7 @@
 class Sprite : public Component, public Renderable
 {
     public:
-        Sprite();
+        Sprite(const Transform&);
         ~Sprite();
         ComponentType get_component_type();
         bool load_from_file(std::string, SDL_Renderer*);
@@ -26,12 +26,12 @@ class Sprite : public Component, public Renderable
         int get_height();
         void set_size(int, int);
         void update();
-        void set_parent(GameObject&);
+        void add_animator(SpriteAnimator*);
         SDL_Texture* get_texture();
         SDL_Rect* get_clip();
         const SDL_Rect* get_render_quad();
     private:
-        std::weak_ptr<Transform> m_transform;
+        const Transform& m_transform;
         std::unique_ptr<SpriteAnimator> m_animator;
         SDL_Texture* m_texture;
         int m_width;

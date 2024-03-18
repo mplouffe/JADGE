@@ -101,16 +101,32 @@ int main(int argc, char* [])
 	// Create the Game World
 	auto scene = std::make_unique<Scene>(new Scene());
 	auto gameObject = new GameObject();
-	auto sprite = new Sprite();
+	auto sprite = new Sprite(gameObject->get_transform());
 	sprite->load_from_file("../assets/sprites/ChewieSpriteSheet.png", renderer->get_renderer());
-	SDL_Rect sprite_clip = { 0, 0, 36, 36 };
-	sprite->set_clip(sprite_clip);
+
+	auto spriteAnimator = new SpriteAnimator();
+	auto keyframes = new std::vector<AnimationKeyFrame>();
+	keyframes->push_back({0, 8});
+	keyframes->push_back({1, 8});
+	keyframes->push_back({2, 8});
+	keyframes->push_back({1, 8});
+
+	auto frames = new std::vector<SDL_Rect>();
+	frames->push_back({0, 0, 36, 36});
+	frames->push_back({36, 0, 36, 36});
+	frames->push_back({72, 0, 36, 36});
+
+	spriteAnimator->set_keyframes(*keyframes);
+	spriteAnimator->set_frames(*frames);
+
+	sprite->add_animator(spriteAnimator);
 	sprite->set_size(150, 150);
-	
-	gameObject->addComponent(ComponentType::SPRITE, sprite);
-	gameObject->get_transform()->movePosition(130, 150);
-	
+
+	gameObject->add_component(ComponentType::SPRITE, sprite);
+	gameObject->move(130, 150);
+
 	scene->add_gameobject(gameObject);
+
 	// bEEp bOOp
 
 	// Games Games Games
