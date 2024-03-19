@@ -18,7 +18,7 @@ JABIWindow::~JABIWindow()
 
 bool JABIWindow::init()
 {
-    window = SDL_CreateWindow("JADGE: Just Another Dumb Game Engine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+    window = SDL_CreateWindow("lvl_0 game engine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
 
     if (window == NULL)
     {
