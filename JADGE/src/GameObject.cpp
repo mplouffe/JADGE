@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include <memory>
 #include "Sprite.h"
+#include "imgui.h"
 
 GameObject::GameObject()
 {
@@ -52,4 +53,12 @@ const Transform& GameObject::get_transform()
 void GameObject::move(int x, int y)
 {
     transform->move_position(x, y);
+}
+
+void GameObject::display_debug() const
+{
+    ImGui::NewFrame();
+    ImGui::Begin("lvl_0 game engine");
+    ImGui::Text("It's Chewie!!! \\O.o/");
+    ImGui::End();
 }

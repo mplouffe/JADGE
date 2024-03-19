@@ -1,21 +1,30 @@
 #include "JABIRenderer.h"
-#include <utility>
 
-#include "imgui.h"
-#include "backends/imgui_impl_sdlrenderer2.h"
 
 JABIRenderer::JABIRenderer()
+: io(ImGui::GetIO())
 {
     renderer = nullptr;
+    (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+
+   	ImGui::StyleColorsDark();
+    clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 }
 
 JABIRenderer::JABIRenderer(JABIRenderer* other)
+    : io(other->io)
 {
     renderer = std::move(other->renderer);
 }
 
 JABIRenderer::~JABIRenderer()
 {
+    ImGui_ImplSDLRenderer2_Shutdown();
+    ImGui_ImplSDL2_Shutdown();
+    ImGui::DestroyContext();
+
     SDL_DestroyRenderer(renderer);
     renderer = nullptr;
 }
@@ -31,6 +40,10 @@ bool JABIRenderer::init(SDL_Window* window)
     // Initialize renderer color
 	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
+    // Init ImGUI
+    ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
+	ImGui_ImplSDLRenderer2_Init(renderer);
+
     return true;
 }
 
@@ -39,6 +52,9 @@ void JABIRenderer::pre_render()
     // Clear Screen
     SDL_SetRenderDrawColor(renderer, 0x55, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(renderer);
+
+    ImGui_ImplSDLRenderer2_NewFrame();
+    ImGui_ImplSDL2_NewFrame();
 }
 
 void JABIRenderer::update(std::vector<Renderable*> renderables)
@@ -51,6 +67,7 @@ void JABIRenderer::update(std::vector<Renderable*> renderables)
 
 void JABIRenderer::render()
 {
+    ImGui::Render();
     ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
     // Update Screen
     SDL_RenderPresent(renderer);

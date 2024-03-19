@@ -14,7 +14,6 @@
 
 #include "JABIRenderer.h"
 #include "JABIWindow.h"
-#include "JABIGUI.h"
 #include "JABIControls.h"
 #include "Sprite.h"
 #include "Scene.h"
@@ -89,12 +88,10 @@ int main(int argc, char* [])
 	// Start the Engine
 	auto window = std::make_unique<JABIWindow>(new JABIWindow());
 	auto renderer = std::make_unique<JABIRenderer>(new JABIRenderer());
-	auto imgui = std::make_unique<JABIGUI>(new JABIGUI());
 	auto controls = std::make_unique<JABIControls>(new JABIControls());
 
 	if (!window->init()) return 0;
 	if (!renderer->init(window->get_window())) return 0;
-	imgui->init(window->get_window(), renderer->get_renderer());
 	controls->init();
 	// VrOOm VrOOm.
 
@@ -135,8 +132,8 @@ int main(int argc, char* [])
 	{
 		controls->update(quit);
 		scene->update();
-		imgui->render();
 		renderer->pre_render();
+		gameObject->display_debug();
 		renderer->update(scene->get_renderables());
 		renderer->render();
 	}

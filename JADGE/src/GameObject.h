@@ -17,6 +17,7 @@ class GameObject
         void move(int, int);
         Renderable* get_renderables();
         const Transform& get_transform();
+        void display_debug() const;
     private:
         std::unique_ptr<Transform> transform;
         std::map<ComponentType, Component*> components;
