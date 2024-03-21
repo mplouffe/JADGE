@@ -57,8 +57,19 @@ void GameObject::move(int x, int y)
 
 void GameObject::display_debug() const
 {
+    static int debugx = 0;
+    static int debugy = 0;
+    
     ImGui::NewFrame();
     ImGui::Begin("lvl_0 game engine");
     ImGui::Text("It's Chewie!!! \\O.o/");
+    ImGui::DragInt("X: ", &debugx, 1);
+    ImGui::DragInt("Y: ", &debugy, 1);
     ImGui::End();
+
+    if (transform != NULL)
+    {
+        SDL_Log("moving transform");
+        transform.get()->move_position(debugx, debugy);
+    }
 }

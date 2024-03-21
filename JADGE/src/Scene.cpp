@@ -20,6 +20,14 @@ void Scene::update()
     }
 }
 
+void Scene::display_debug()
+{
+    for(const auto gameObject : gameObjects)
+    {
+        gameObject->display_debug();
+    }
+}
+
 std::vector<Renderable*> Scene::get_renderables()
 {
     std::vector<Renderable*> renderables;

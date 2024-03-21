@@ -133,7 +133,7 @@ int main(int argc, char* [])
 		controls->update(quit);
 		scene->update();
 		renderer->pre_render();
-		gameObject->display_debug();
+		scene->display_debug();
 		renderer->update(scene->get_renderables());
 		renderer->render();
 	}

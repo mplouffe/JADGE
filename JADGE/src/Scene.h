@@ -11,6 +11,7 @@ class Scene
         Scene(Scene*);
         void add_gameobject(GameObject*);
         void update();
+        void display_debug();
         std::vector<Renderable*> get_renderables();
     private:
         std::vector<std::shared_ptr<GameObject>> gameObjects;
