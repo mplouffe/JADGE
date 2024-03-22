@@ -45,6 +45,15 @@ Renderable* GameObject::get_renderables()
     }
 }
 
+DebugRenderable* GameObject::get_debug_renderables()
+{
+    if (components.find(ComponentType::BOX_COLLIDER) != components.end())
+    {
+        return (DebugRenderable*)(components.at(ComponentType::BOX_COLLIDER));
+    }
+}
+
+
 const Transform& GameObject::get_transform()
 {
     return *transform;

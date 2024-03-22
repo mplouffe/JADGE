@@ -5,7 +5,7 @@ class GameObject;
 enum ComponentType
 {
     TRANSFORM,
-	// BOX_COLLIDER,
+	BOX_COLLIDER,
     // PHYSICBODY,
     SPRITE,
 };

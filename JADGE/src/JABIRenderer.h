@@ -3,6 +3,7 @@
 #include <vector>
 #include <SDL.h>
 #include "Renderable.h"
+#include "DebugRenderable.h"
 #include "imgui.h"
 
 #include "backends/imgui_impl_sdlrenderer2.h"
@@ -18,6 +19,7 @@ class JABIRenderer
         bool init(SDL_Window*);
         void pre_render();
         void update(std::vector<Renderable*>);
+        void debug_update(std::vector<DebugRenderable*>);
         void render();
         SDL_Renderer* get_renderer();
     private:

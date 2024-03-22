@@ -18,6 +18,7 @@
 #include "Sprite.h"
 #include "Scene.h"
 #include "GameObject.h"
+#include "BoxCollider.h"
 
 // Audio
 // - Music
@@ -118,8 +119,12 @@ int main(int argc, char* [])
 
 	sprite->add_animator(spriteAnimator);
 	sprite->set_size(150, 150);
-
 	gameObject->add_component(ComponentType::SPRITE, sprite);
+
+	auto box_collider = new BoxCollider(gameObject->get_transform());
+	box_collider->set_size(150, 150);
+	gameObject->add_component(ComponentType::BOX_COLLIDER, box_collider);
+
 	gameObject->move(130, 150);
 
 	scene->add_gameobject(gameObject);
@@ -135,6 +140,8 @@ int main(int argc, char* [])
 		renderer->pre_render();
 		scene->display_debug();
 		renderer->update(scene->get_renderables());
+		SDL_Log("about to debug update");
+		renderer->debug_update(scene->get_debug_renderables());
 		renderer->render();
 	}
 	// Win Win Win!!!

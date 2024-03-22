@@ -3,6 +3,7 @@
 #include "Component.h"
 #include "Transform.h"
 #include "Renderable.h"
+#include "DebugRenderable.h"
 #include <memory>
 #include <map>
 
@@ -16,6 +17,7 @@ class GameObject
         bool remove_component(ComponentType);
         void move(int, int);
         Renderable* get_renderables();
+        DebugRenderable* get_debug_renderables();
         const Transform& get_transform();
         void display_debug() const;
     private:

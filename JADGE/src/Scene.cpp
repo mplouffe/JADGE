@@ -42,3 +42,18 @@ std::vector<Renderable*> Scene::get_renderables()
 
     return renderables;
 }
+
+std::vector<DebugRenderable*> Scene::get_debug_renderables()
+{
+    std::vector<DebugRenderable*> debug_renderables;
+    for(const auto gameObject : gameObjects)
+    {
+        auto renderable = gameObject->get_debug_renderables();
+        if (renderable != nullptr)
+        {
+            debug_renderables.insert(debug_renderables.end(), renderable);
+        }
+    }
+
+    return debug_renderables;
+}
