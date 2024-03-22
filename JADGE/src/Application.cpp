@@ -122,7 +122,8 @@ int main(int argc, char* [])
 	gameObject->add_component(ComponentType::SPRITE, sprite);
 
 	auto box_collider = new BoxCollider(gameObject->get_transform());
-	box_collider->set_size(150, 150);
+	box_collider->set_size(105, 105);
+	box_collider->set_offset(15, 45);
 	gameObject->add_component(ComponentType::BOX_COLLIDER, box_collider);
 
 	gameObject->move(130, 150);
@@ -140,7 +141,6 @@ int main(int argc, char* [])
 		renderer->pre_render();
 		scene->display_debug();
 		renderer->update(scene->get_renderables());
-		SDL_Log("about to debug update");
 		renderer->debug_update(scene->get_debug_renderables());
 		renderer->render();
 	}

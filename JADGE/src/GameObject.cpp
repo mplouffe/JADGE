@@ -49,7 +49,7 @@ DebugRenderable* GameObject::get_debug_renderables()
 {
     if (components.find(ComponentType::BOX_COLLIDER) != components.end())
     {
-        return (DebugRenderable*)(components.at(ComponentType::BOX_COLLIDER));
+        return (BoxCollider*)(components.at(ComponentType::BOX_COLLIDER));
     }
 }
 

@@ -67,13 +67,11 @@ void JABIRenderer::update(std::vector<Renderable*> renderables)
 
 void JABIRenderer::debug_update(std::vector<DebugRenderable*> debug_renderables)
 {
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xFF);
     for(auto renderable : debug_renderables)
     {
-        SDL_Log("About to draw rect");
-        auto rect = renderable->get_rect();
-        SDL_Log("Got Rect");
-        SDL_RenderDrawRect(renderer, rect);
-        SDL_Log("Done drawing rect");
+
+        SDL_RenderDrawRect(renderer, renderable->get_rect());
     }
 }
 

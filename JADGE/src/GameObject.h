@@ -4,6 +4,7 @@
 #include "Transform.h"
 #include "Renderable.h"
 #include "DebugRenderable.h"
+#include "BoxCollider.h"
 #include <memory>
 #include <map>
 

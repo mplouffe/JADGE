@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include "Renderable.h"
 #include "DebugRenderable.h"
+#include "BoxCollider.h"
 #include "imgui.h"
 
 #include "backends/imgui_impl_sdlrenderer2.h"

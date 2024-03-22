@@ -22,6 +22,12 @@ void BoxCollider::set_size(int width, int height)
     m_rect = new SDL_Rect({x, y, width, height});
 }
 
+void BoxCollider::set_offset(int x, int y)
+{
+    xOffset = x;
+    yOffset = y;
+}
+
 SDL_Rect* BoxCollider::get_rect()
 {
     if (m_rect == nullptr)
@@ -30,7 +36,9 @@ SDL_Rect* BoxCollider::get_rect()
         return m_rect;
     }
 
-    SDL_Log("About to tie");
-    std::tie(m_rect->x, m_rect->y) = m_transform.get_position();
+    int x, y;
+    std::tie(x, y) = m_transform.get_position();
+    m_rect->x = x + xOffset;
+    m_rect->y = y + yOffset;
     return m_rect;
 }
