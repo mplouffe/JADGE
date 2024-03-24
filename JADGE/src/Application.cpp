@@ -134,15 +134,19 @@ int main(int argc, char* [])
 
 	// Games Games Games
 	bool quit = false;
+	bool display_debug = false;
 	while(!quit)
 	{
-		controls->update(quit);
+		controls->update(quit, display_debug);
 		scene->update();
-		renderer->pre_render();
-		scene->display_debug();
+		renderer->pre_render(display_debug);
+		if (display_debug) 
+		{
+			scene->display_debug();
+			renderer->debug_update(scene->get_debug_renderables());
+		}
 		renderer->update(scene->get_renderables());
-		renderer->debug_update(scene->get_debug_renderables());
-		renderer->render();
+		renderer->render(display_debug);
 	}
 	// Win Win Win!!!
 

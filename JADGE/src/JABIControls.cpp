@@ -40,14 +40,14 @@ void JABIControls::init()
 
 void JABIControls::handle_keydown()
 {
-    SDL_Log("Can I even handle this?");
+    /// SDL_Log("Can I even handle this?");
 }
 
-void JABIControls::update(bool& quit)
+void JABIControls::update(bool& quit, bool& display_debug)
 {
     while(SDL_PollEvent(&e))
-    { 
-        ImGui_ImplSDL2_ProcessEvent(&e);
+    {
+        if (display_debug) ImGui_ImplSDL2_ProcessEvent(&e);
 
         if (auto search = function_map.find(e.type); search != function_map.end())
         {
@@ -57,6 +57,16 @@ void JABIControls::update(bool& quit)
         if(e.type == SDL_QUIT)
         {
             quit = true;
+        }
+
+        if(e.type == SDL_KEYDOWN)
+        {
+            switch(e.key.keysym.sym)
+            {
+                case SDLK_HOME:
+                    display_debug = !display_debug;
+                    break;
+            }
         }
     }
 }

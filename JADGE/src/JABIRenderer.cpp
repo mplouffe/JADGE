@@ -47,14 +47,17 @@ bool JABIRenderer::init(SDL_Window* window)
     return true;
 }
 
-void JABIRenderer::pre_render()
+void JABIRenderer::pre_render(bool& draw_debug)
 {
     // Clear Screen
     SDL_SetRenderDrawColor(renderer, 0x55, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(renderer);
 
-    ImGui_ImplSDLRenderer2_NewFrame();
-    ImGui_ImplSDL2_NewFrame();
+    if (draw_debug)
+    {
+        ImGui_ImplSDLRenderer2_NewFrame();
+        ImGui_ImplSDL2_NewFrame();
+    }
 }
 
 void JABIRenderer::update(std::vector<Renderable*> renderables)
@@ -70,15 +73,17 @@ void JABIRenderer::debug_update(std::vector<DebugRenderable*> debug_renderables)
     SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xFF);
     for(auto renderable : debug_renderables)
     {
-
         SDL_RenderDrawRect(renderer, renderable->get_rect());
     }
 }
 
-void JABIRenderer::render()
+void JABIRenderer::render(bool& draw_debug)
 {
-    ImGui::Render();
-    ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
+    if (draw_debug)
+    {
+        ImGui::Render();
+        ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
+    }
     // Update Screen
     SDL_RenderPresent(renderer);
 }

@@ -10,7 +10,7 @@ class JABIControls
         JABIControls(JABIControls*);
         ~JABIControls();
         void init();
-        void update(bool& quit);
+        void update(bool&, bool&);
         void handle_keydown();
     private:
         SDL_Event e;

@@ -18,10 +18,10 @@ class JABIRenderer
         JABIRenderer(JABIRenderer*);
         ~JABIRenderer();
         bool init(SDL_Window*);
-        void pre_render();
+        void pre_render(bool& draw_debug);
         void update(std::vector<Renderable*>);
         void debug_update(std::vector<DebugRenderable*>);
-        void render();
+        void render(bool& draw_debug);
         SDL_Renderer* get_renderer();
     private:
         SDL_Renderer* renderer;
